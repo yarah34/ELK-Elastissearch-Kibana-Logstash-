@@ -87,6 +87,7 @@ xpack.security.enabled: false
 Конфигурационный файл расположен в /etc/kibana/kibana.yml.
 Необходимо изменить файл до следующего вида:
 ![Рисунок2](https://user-images.githubusercontent.com/77727504/160297208-a05da0ba-a381-476d-8441-26535b967285.png)
+
 Перезапустить Kibana
 ```
 sudo systemctl restart kibana
@@ -99,6 +100,7 @@ sudo systemctl start elasticsearch.service
 Теперь есть возможность получить доступ к Kibana из браузера.
 Зайти можно по ссылке `http://your_VM_IP:5601`
 И выбрать "Explore my own"
+
 ![image](https://user-images.githubusercontent.com/77727504/160297847-79ffc0f8-aa6b-44c4-8beb-1e1d67b31179.png)
 ### Logstash
 Конфигурационный файл Logstash содержится в /etc/logstash/conf.d/.
@@ -142,20 +144,24 @@ PS C:\Program Files\Winlogbeat> services.msc
 Запись событий с прямым доступом до хранилища с помощью winlogbeat
 -----------------------------------
 Далее необходимо обратиться к Kibana в браузере и настроить ее на получение сообщений от Winlogbeat.
-Открываем меню слева, заходим по пути Stack Management(в самом низу панели) > Index Patterns и создаем новый.
-В поле Index pattern name пишем регулярное выражение winlogbeat-*
+Открываем меню слева, заходим по пути "Stack Management"(в самом низу панели) > "Index Patterns" и создаем новый.
+В поле "Index pattern name" пишем регулярное выражение "winlogbeat-*"
+
 ![image](https://user-images.githubusercontent.com/77727504/160298603-0e56da65-fe2b-473e-950b-8333d363dab5.png)
-Далее в поле Time field указываем event.created.
+
+Далее в поле "Time field" указываем "event.created".
 ![image](https://user-images.githubusercontent.com/77727504/160298733-2a288956-4871-4bea-9f9a-093d27ecbb72.png)
-Возвращаемся в левую панель меню и выбираем Discover. Высветятся все логи от winlogbeat.
+
+Возвращаемся в левую панель меню и выбираем "Discover". Высветятся все логи от winlogbeat.
 Есть возможность настроить фильтр по логам:
+
 ![image](https://user-images.githubusercontent.com/77727504/160298789-1f0c690d-552a-4d19-9d24-1128a8735c2f.png)
 
 Запись событий с доступом через сервис Logstash
 -----------------------------------
 Сейчас используем второй вариант записи событий с помощью сервиса Logstash.
 Для этого необходимо изменить winlogbeat.yml:
-Закоментировать строки
+Закомментировать строки:
 ```
 output.elasticsearch:
  #hosts: ["ip-адрес SIEM:9200"]
@@ -166,7 +172,9 @@ output.logstash:
   hosts: ["ip-адрес SIEM:5044"]
 ```
 Теперь есть возможность настраивать логи с помощью сервиса logstash. Конфигурационный файл logstash.conf имеет функцию filter используемую для фильтрации и конфигурации логов.
+
 ссылка на ресурс: <https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html>
+
 Установка сервиса OpenDistro
 -----------------------------------
 На данный момент ELK настроены таким образом, что данные между сервисами передаются в открытом виде, что не соответствует нормам безопасности. Для обеспечения безопасного соединения используется OpenDistro. 
@@ -184,7 +192,7 @@ sudo bin/kibana-plugin install https://d3g5vo6xdbdb9a.cloudfront.net/downloads/k
 sudo bin/elasticsearch-plugin install https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-security/opendistro-security-1.13.1.0.zip
 ```
 Необходимо утвердительно ответить на все вопросы при установке.
-Далее происходит выпуск сертификатов для защищенного соединения. В нашем случае можно только использовать самоподписанные сертификаты.
+Далее происходит выпуск сертификатов для защищенного соединения. В нашем случае можно использовать только самоподписанные сертификаты.
 ```
 cd /usr/share/elasticsearch/plugins/opendistro_security/tools/
 chmod +x install_demo_configuration.sh
@@ -193,6 +201,7 @@ chmod +x install_demo_configuration.sh
 При установке отвечаем на все вопросы "y".
 ### Настройка Logstash на безопасное соединение
 Необходимо внести изменения в конфигурационный файл /etc/logstash/conf.d/logstash.conf
+
 ![image](https://user-images.githubusercontent.com/77727504/160300057-c84a5711-8d1b-465c-a93d-ae99efd30f57.png)
 
 После всех внесенных изменений сервисы должны быть перезапущены.
@@ -203,15 +212,21 @@ systemctl restart kibana
 ```
 ### Проверка работы настроенного защищенного соединения в браузере
 При переходе на сайт kibana будет предоставлено окно для аутентификации (admin:admin).
+
 ![image](https://user-images.githubusercontent.com/77727504/160300143-716b74c7-a398-4bc6-9ef0-bfa978b45a9c.png)
-Также теперь в сервисе Kibana появилась новая возможность создавать ролевую модель пользователя. Необходимо в меню выбрать Security и можно посмотреть всех внутренних пользователей.
+
+Также теперь в сервисе Kibana появилась новая возможность создавать ролевую модель пользователя. Необходимо в меню выбрать "Security" и можно посмотреть всех внутренних пользователей.
+
 ![image](https://user-images.githubusercontent.com/77727504/160300224-7adc6108-b873-4abe-a43a-7e1eb38c2d6e.png)
+
 Например, есть возможность создать пользователя с единственным правом чтения.
+
 ![image](https://user-images.githubusercontent.com/77727504/160300278-7631ca98-35f3-4c09-b057-1c622a5874ce.png)
 
 Установка централизованного сбора логов с помощью rsyslog
 -----------------------------------
 ссылка на ресурс: <https://www.elastic.co/blog/how-to-centralize-logs-with-rsyslog-logstash-and-elasticsearch-on-ubuntu-14-04>
+
 Было бы очень удобно, если бы логи со всех серверов сети собирались на одной машине. Здесь были бы все важные сообщения об ошибках и неполадках. Их можно было бы очень быстро проанализировать. Отправление логов на удаленный сервер (logstash) будет производиться с помощью сервиса rsyslog на VM Ubuntu.
 ### VM Ubuntu (rsyslog-сервер)
 Проверим наличие и статус работы сервиса rsyslog
@@ -220,17 +235,19 @@ systemctl restart kibana
  ```
  В файле /etc/rsyslog.conf необходимо расскомментировать строки для отправки логов по UDP-протоколу:
  ![image](https://user-images.githubusercontent.com/77727504/160300947-e87bcebb-3662-4b89-834c-276aa4f6f231.png)
+ 
  Далее необходимо добавить в конец файла /etc/rsyslog.d/50-default.conf строку:
  ```
  *.*                                      @ip_Ubuntu:514
  ```
  ![image](https://user-images.githubusercontent.com/77727504/160301106-4131c427-202e-4a23-8692-d760aad0f00b.png)
+ 
  Далее необходимо перезагрузить rsyslog-сервис
  ```
  systemctl restart rsyslog
  ```
  Необходимо проверить работу ufw и отключить сервис (в лучшем случае необходимо было проверить открыт ли порт 514/udp).
- Elasticsearch требует, чтобы все документы, которые он получает, были в формате JSON, и rsyslog предоставляет способ сделать это с помощью шаблона. создайте новый файл конфигурации для форматирования сообщений в формате JSON перед отправкой в Logstash:
+ Elasticsearch требует, чтобы все документы, которые он получает, были в формате JSON, и rsyslog предоставляет способ сделать это с помощью шаблона. Создайте новый файл конфигурации для форматирования сообщений в формате JSON перед отправкой в Logstash:
  ```
  sudo nano /etc/rsyslog.d/01-json-template.conf
  ```
@@ -260,7 +277,7 @@ sudo nano /etc/rsyslog.d/60-output.conf
 # using the "json-template" format template
 *.*                         @private_ip_logstash:10514;json-template
 ```
-*.* в начале означает обработку оставшейся части строки для всех сообщений журнала. Символы @означают использование UDP (@@ для TCP). IP-адрес или имя хоста после @, куда пересылать сообщения.
+\*.\* в начале означает обработку оставшейся части строки для всех сообщений журнала. Символы @означают использование UDP (@@ для TCP). IP-адрес или имя хоста после @, куда пересылать сообщения.
 ### CentOS (logstash)
 Настроим logstash на получение сообщений от rsyslog.
 Изменим файл /etc/logstash/conf.d/logstash.conf:
