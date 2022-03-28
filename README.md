@@ -86,6 +86,7 @@ xpack.security.enabled: false
 ### Kibana
 Конфигурационный файл расположен в /etc/kibana/kibana.yml.
 Необходимо изменить файл до следующего вида:
+
 ![Рисунок2](https://user-images.githubusercontent.com/77727504/160297208-a05da0ba-a381-476d-8441-26535b967285.png)
 
 Перезапустить Kibana
