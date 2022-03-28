@@ -96,7 +96,7 @@ sudo systemctl restart kibana
 Далее следует проверить настройки firewall. В данном случае его лучше выключить.
 ````
 sudo systemctl disable firewalld.service
-sudo systemctl start elasticsearch.service
+sudo systemctl stop firewalld.service
 ````
 Теперь есть возможность получить доступ к Kibana из браузера.
 Зайти можно по ссылке `http://your_VM_IP:5601`
@@ -248,6 +248,10 @@ systemctl restart kibana
  systemctl restart rsyslog
  ```
  Необходимо проверить работу ufw и отключить сервис (в лучшем случае необходимо было проверить открыт ли порт 514/udp).
+ ```
+ systemctl disable ufw
+ systemctl stop ufw
+ ```
  Elasticsearch требует, чтобы все документы, которые он получает, были в формате JSON, и rsyslog предоставляет способ сделать это с помощью шаблона. Создайте новый файл конфигурации для форматирования сообщений в формате JSON перед отправкой в Logstash:
  ```
  sudo nano /etc/rsyslog.d/01-json-template.conf
