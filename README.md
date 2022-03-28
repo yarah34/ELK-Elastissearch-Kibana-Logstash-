@@ -2,8 +2,8 @@
 =====================
 Для выполнения понадобится:
 * подключение к сети Интернет
-* VM Ubuntu 18.04 (<https://releases.ubuntu.com/18.04/>)
-* VM CentOS Stream в минимальной конфигурации. (<https://trendoceans.com/how-to-install-centos-stream-8-x86_64/>)
+* VM [Ubuntu 18.04](https://releases.ubuntu.com/18.04/)
+* VM [CentOS 8 Stream](https://trendoceans.com/how-to-install-centos-stream-8-x86_64/) в минимальной конфигурации
 
 Минимальные требования:
 * 2 ядра процессора
@@ -16,7 +16,7 @@
 * Объем диска 60 Гб.
 Установка компонентов на CentOS
 -----------------------------------
-### Elasticsearch (v.7.10.2)
+### Elasticsearch (v.7.10.2)]
 ссылка на ресурс: <https://www.elastic.co/guide/en/elasticsearch/reference/7.10/rpm.html>
 ```
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-x86_64.rpm
