@@ -2,8 +2,8 @@
 =====================
 Для выполнения понадобится:
 * подключение к сети Интернет
-* VM Ubuntu
-* VM CentOS Stream в минимальной конфигурации.
+* VM Ubuntu 18.04 (<https://releases.ubuntu.com/18.04/>)
+* VM CentOS Stream в минимальной конфигурации. (<https://trendoceans.com/how-to-install-centos-stream-8-x86_64/>)
 
 Минимальные требования:
 * 2 ядра процессора
